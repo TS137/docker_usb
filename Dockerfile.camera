@@ -1,7 +1,11 @@
-FROM archlinux:base-devel
+FROM ubuntu:24.04
 
-RUN pacman -Syu --noconfirm && \
-    pacman -S --noconfirm ffmpeg x264
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y ffmpeg netcat-openbsd && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /app
 

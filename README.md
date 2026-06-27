@@ -1,6 +1,6 @@
 # Docker USB Camera RTMP Streaming Server
 
-在 Arch Linux 下基于 Docker 的本地 USB 摄像头 RTMP 推流服务器，支持 HLS Web 实时预览。
+基于 Docker (宿主机 Arch Linux + 容器 Ubuntu) 的本地 USB 摄像头 RTMP 推流服务器，支持 HLS Web 实时预览。
 
 ## 功能
 

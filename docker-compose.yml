@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  nginx-rtmp:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    container_name: nginx-rtmp
+    ports:
+      - "${NGINX_RTMP_PORT:-1935}:1935"
+      - "${NGINX_HTTP_PORT:-8080}:8080"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - hls_data:/tmp/hls
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - stream-net
+
+  camera-streamer:
+    build:
+      context: .
+      dockerfile: Dockerfile.camera
+    container_name: camera-streamer
+    devices:
+      - "${CAMERA_DEVICE:-/dev/video0}:${CAMERA_DEVICE:-/dev/video0}"
+    environment:
+      - CAMERA_DEVICE=${CAMERA_DEVICE:-/dev/video0}
+      - RESOLUTION=${RESOLUTION:-1280x720}
+      - FRAMERATE=${FRAMERATE:-30}
+      - BITRATE=${BITRATE:-2000k}
+      - RTMP_TARGET=${RTMP_TARGET:-rtmp://nginx-rtmp:1935/live/stream}
+      - EXTRA_RTMP_TARGET=${EXTRA_RTMP_TARGET:-}
+    depends_on:
+      nginx-rtmp:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - stream-net
+
+volumes:
+  hls_data:
+
+networks:
+  stream-net:
+    driver: bridge

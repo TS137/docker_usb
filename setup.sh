@@ -17,6 +17,13 @@ if ! command -v docker &>/dev/null; then
     exit 1
 fi
 
+# Check Docker daemon is running
+if ! docker info &>/dev/null 2>&1; then
+    echo "[ERROR] Docker daemon is not running."
+    echo "  Start the daemon: sudo systemctl start docker"
+    exit 1
+fi
+
 # Check Docker Compose
 COMPOSE_CMD=""
 if docker compose version &>/dev/null; then

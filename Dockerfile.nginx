@@ -1,6 +1,4 @@
-FROM nginx:alpine
-
-RUN apk add --no-cache nginx-mod-rtmp
+FROM tiangolo/nginx-rtmp:latest
 
 RUN mkdir -p /tmp/hls && chmod 777 /tmp/hls
 

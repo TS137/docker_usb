@@ -113,6 +113,9 @@ EOF
 echo "[INFO] Configuration saved to .env"
 echo ""
 
+# Ensure HLS output directory exists for bind mount
+mkdir -p hls
+
 # Build and start
 echo "[INFO] Building Docker images..."
 $COMPOSE_CMD build

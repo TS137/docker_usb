@@ -70,10 +70,11 @@ sudo systemctl enable --now docker
 ├── .env.example          # 配置模板
 ├── setup.sh              # 一键部署脚本
 ├── entrypoint.sh         # 采集容器入口脚本
-├── Dockerfile.camera     # FFmpeg 采集编码镜像
-├── Dockerfile.nginx      # Nginx RTMP 镜像
+├── Dockerfile.camera     # FFmpeg 采集编码镜像 (ubuntu:24.04)
+├── Dockerfile.nginx      # Nginx RTMP 镜像 (nginx:alpine)
 ├── nginx.conf            # Nginx RTMP + HLS 配置
-├── web/index.html        # HLS 预览页面
+├── hls/                  # HLS 分片输出目录 (bind mount)
+├── web/index.html        # HLS 预览页面 (hls.js 1.5.17)
 └── README.md
 ```
 

@@ -17,6 +17,9 @@ done
 
 echo "[camera-streamer] RTMP server ready. Starting capture and encoding..."
 
+# Calculate GOP: keyframe every 2 seconds to ensure 3s HLS segments align properly
+GOP=$((FRAMERATE * 2))
+
 if [ -n "${EXTRA_RTMP_TARGET}" ]; then
     echo "[camera-streamer] Also pushing to external target: ${EXTRA_RTMP_TARGET}"
 
@@ -30,6 +33,9 @@ if [ -n "${EXTRA_RTMP_TARGET}" ]; then
         -c:v libx264 \
         -preset veryfast \
         -tune zerolatency \
+        -g "${GOP}" \
+        -keyint_min "${GOP}" \
+        -sc_threshold 0 \
         -b:v "${BITRATE}" \
         -an \
         -f tee \
@@ -45,6 +51,9 @@ else
         -c:v libx264 \
         -preset veryfast \
         -tune zerolatency \
+        -g "${GOP}" \
+        -keyint_min "${GOP}" \
+        -sc_threshold 0 \
         -b:v "${BITRATE}" \
         -an \
         -f flv \
